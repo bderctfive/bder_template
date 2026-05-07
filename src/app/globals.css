@@ -1,14 +1,74 @@
 @import "tailwindcss";
 
-/* Si necesitas añadir estilos personalizados o extender el tema, 
-   se hace directamente aquí con CSS estándar o @theme */
-
 @layer base {
+  :root {
+    /* Refinamos los colores base para un look más profesional */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    /* Suavizamos el scroll global */
+    scroll-behavior: smooth;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
   html {
+    /* Mejora el renderizado de fuentes en todos los navegadores */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     @apply scroll-smooth;
   }
-  
+
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
+    /* Usamos un color de fondo ligeramente más "marcado" (slate-50) 
+       para que los componentes blancos resalten (Card-style) */
+    @apply bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900;
+  }
+}
+
+@layer components {
+  /* Estilos para que las barras de desplazamiento sean minimalistas */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full border-4 border-solid border-slate-50;
+    &:hover {
+      @apply bg-slate-400;
+    }
+  }
+}
+
+/* @theme: Aquí extendemos las animaciones y efectos que usamos en el Hero */
+@theme {
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+/* Utilities personalizadas para efectos visuales recurrentes */
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600;
+  }
+
+  .balance {
+    text-wrap: balance;
   }
 }

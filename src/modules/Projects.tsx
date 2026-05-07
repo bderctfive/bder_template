@@ -42,6 +42,7 @@ const PROJECTS = [
 
 export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   return (
     <section className="py-32 bg-slate-950 overflow-hidden relative">
@@ -49,6 +50,7 @@ export const Projects = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           className="max-w-2xl"
         >
           <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase leading-[0.9]">
@@ -58,25 +60,34 @@ export const Projects = () => {
       </div>
 
       {/* Carrusel Infinito */}
-      <div className="flex overflow-hidden group">
+      <div className="flex overflow-hidden group relative">
         <motion.div 
           className="flex gap-8 px-4"
-          animate={{ x: [0, -1000] }}
+          // Si está en hover, la animación se detiene (puedes ajustar el valor de x actual si prefieres)
+          animate={isPaused ? {} : { x: [0, -1500] }}
           transition={{ 
-            duration: 25, 
-            repeat: Infinity, 
-            ease: "linear",
-            pauseOnHover: true 
+            x: {
+              duration: 30, 
+              repeat: Infinity, 
+              ease: "linear",
+            }
           }}
+          onHoverStart={() => setIsPaused(true)}
+          onHoverEnd={() => setIsPaused(false)}
         >
-          {[...PROJECTS, ...PROJECTS].map((project, i) => (
+          {/* Triplicamos para asegurar que no haya huecos blancos en pantallas grandes */}
+          {[...PROJECTS, ...PROJECTS, ...PROJECTS].map((project, i) => (
             <ProjectCard 
-              key={i} 
+              key={`${project.title}-${i}`} 
               project={project} 
               onClick={() => setSelectedProject(project)} 
             />
           ))}
         </motion.div>
+
+        {/* Gradientes laterales para suavizar bordes */}
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
       </div>
 
       {/* Modal / Dialog */}
@@ -90,13 +101,14 @@ export const Projects = () => {
               onClick={() => setSelectedProject(null)}
               className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl"
             />
+            
             <motion.div 
-              layoutId={selectedProject.title}
-              className="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+              layoutId={`card-${selectedProject.title}`}
+              className="relative w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl z-20"
             >
               <button 
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors"
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors z-30"
               >
                 <X size={20} />
               </button>
@@ -132,27 +144,35 @@ export const Projects = () => {
   );
 };
 
-const ProjectCard = ({ project, onClick }: { project: typeof PROJECTS[0], onClick: () => void }) => {
+interface ProjectCardProps {
+  project: typeof PROJECTS[0];
+  onClick: () => void;
+}
+
+const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
   const isMystery = project.status === 'mystery';
 
   return (
     <motion.div 
+      layoutId={`card-${project.title}`}
       whileHover={{ y: -10 }}
       onClick={onClick}
       className="relative w-[350px] md:w-[450px] flex-shrink-0 cursor-pointer group"
     >
       <div className={cn(
         "relative aspect-[16/10] rounded-[2rem] overflow-hidden border border-white/10 bg-slate-900 transition-all duration-500",
-        isMystery && "grayscale blur-[2px] group-hover:blur-0 group-hover:grayscale-0"
+        isMystery && "grayscale blur-[1px] group-hover:blur-0 group-hover:grayscale-0"
       )}>
-        {/* Simulación de Imagen/Preview */}
+        {/* Background Gradient */}
         <div className={cn(
           "absolute inset-0 bg-gradient-to-br opacity-20",
           project.color === 'blue' ? "from-blue-600 to-cyan-500" : 
           project.color === 'emerald' ? "from-emerald-600 to-teal-500" :
-          "from-purple-600 to-pink-500"
+          project.color === 'purple' ? "from-purple-600 to-pink-500" :
+          "from-amber-600 to-orange-500"
         )} />
         
+        {/* Icon Center */}
         <div className="absolute inset-0 flex items-center justify-center">
           {isMystery ? (
             <ShieldQuestion size={60} className="text-white/10 group-hover:text-white/40 transition-colors duration-500" />
@@ -161,7 +181,8 @@ const ProjectCard = ({ project, onClick }: { project: typeof PROJECTS[0], onClic
           )}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent">
+        {/* Content Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent">
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-blue-400/80 mb-2 block">
             {project.tag}
           </span>

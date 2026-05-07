@@ -1,15 +1,16 @@
 "use client";
 
 import React from 'react';
-import { motion } from "framer-motion";
+// 1. Importamos el tipo Variants
+import { motion, Variants } from "framer-motion";
 import { Code2, Cpu, Globe2, Rocket, Terminal } from "lucide-react";
 import Image from 'next/image';
 
 export const About = () => {
-  // Configuración para el carrusel infinito
-  const marqueeVariants = {
+  // 2. Aplicamos el tipo Variants a nuestro objeto
+  const marqueeVariants: Variants = {
     animate: {
-      x: [0, -1035], // Ajusta este valor según el ancho total de tu tira de iconos
+      x: [0, -1035],
       transition: {
         x: {
           repeat: Infinity,
@@ -43,6 +44,7 @@ export const About = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             className="flex-1 relative"
           >
             <div className="relative z-10 rounded-[3rem] overflow-hidden border border-white/10 bg-slate-900 aspect-square group">
@@ -69,7 +71,11 @@ export const About = () => {
 
           {/* Lado Derecho: Texto */}
           <div className="flex-1">
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}>
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }} 
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
               <span className="text-blue-500 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Nuestra Filosofía</span>
               <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter leading-[0.9]">
                 Construimos el <span className="text-slate-700">núcleo</span> de tu infraestructura.
@@ -98,30 +104,27 @@ export const About = () => {
           </div>
         </div>
 
-        {/* Carrusel Infinito de Tecnologías */}
+        {/* Carrusel Infinito */}
         <div className="relative mt-24 py-12 border-y border-white/5 bg-slate-900/20">
           <p className="text-center text-slate-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">
             Stack Tecnológico de Alto Rendimiento
           </p>
 
           <div className="space-y-8">
-            {/* Fila 1: Izquierda */}
             <div className="flex overflow-hidden">
               <motion.div 
                 className="flex gap-4 flex-nowrap"
                 variants={marqueeVariants}
                 animate="animate"
               >
+                {/* Usar una sola URL de skillicons con más iconos suele ser más eficiente */}
                 <img src="https://skillicons.dev/icons?i=python,js,react,angular,fastapi,django,laravel,dart,flutter&theme=dark" alt="tech-1" className="h-12 md:h-16 max-w-none" />
                 <img src="https://skillicons.dev/icons?i=python,js,react,angular,fastapi,django,laravel,dart,flutter&theme=dark" alt="tech-1-dup" className="h-12 md:h-16 max-w-none" />
                 <img src="https://skillicons.dev/icons?i=python,js,react,angular,fastapi,django,laravel,dart,flutter&theme=dark" alt="tech-1-dup2" className="h-12 md:h-16 max-w-none" />
               </motion.div>
             </div>
-
-
           </div>
 
-          {/* Gradientes laterales para difuminar la entrada/salida del carrusel */}
           <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-950 to-transparent z-20" />
           <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-950 to-transparent z-20" />
         </div>

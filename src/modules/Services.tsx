@@ -19,7 +19,7 @@ const SERVICES = [
     title: "Software & Apps",
     desc: "Desarrollo de ecosistemas digitales escalables con tecnologías de vanguardia como Next.js y Python.",
     icon: Laptop,
-    image: "/images/services/software.jpg", // Asegúrate de tener estas rutas
+    image: "/images/services/software.webp", // Asegúrate de tener estas rutas
     color: "from-blue-500 to-cyan-400",
     shadow: "shadow-blue-500/20"
   },

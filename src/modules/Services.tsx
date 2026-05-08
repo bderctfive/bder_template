@@ -19,7 +19,7 @@ const SERVICES = [
     title: "Software & Apps",
     desc: "Desarrollo de ecosistemas digitales escalables con tecnologías de vanguardia como Next.js y Python.",
     icon: Laptop,
-    image: "/images/services/software.webp", // Asegúrate de tener estas rutas
+    image: "/images/services/software.webp",
     color: "from-blue-500 to-cyan-400",
     shadow: "shadow-blue-500/20"
   },
@@ -62,7 +62,6 @@ const SERVICES = [
 ];
 
 export const Services = () => {
-  // Siempre empieza en el primer servicio (ID "01")
   const [expandedId, setExpandedId] = useState<string | null>("01");
 
   return (
@@ -78,8 +77,7 @@ export const Services = () => {
           </motion.h2>
         </div>
 
-        {/* Layout Adaptable: Columna en móvil, Fila en escritorio */}
-        <div className="flex flex-col md:flex-row h-auto md:h-[650px] gap-4">
+        <div className="flex flex-col md:flex-row h-auto md:h-[700px] gap-4">
           <LayoutGroup>
             {SERVICES.map((service) => {
               const isExpanded = expandedId === service.id;
@@ -91,27 +89,27 @@ export const Services = () => {
                   onMouseEnter={() => setExpandedId(service.id)}
                   onClick={() => setExpandedId(service.id)}
                   className={cn(
-                    "relative overflow-hidden cursor-pointer rounded-[2.5rem] border border-white/10 transition-all duration-500 ease-in-out",
+                    "relative overflow-hidden cursor-pointer rounded-[3rem] border border-white/10 transition-all duration-500 ease-in-out flex flex-col",
                     isExpanded 
-                      ? "flex-[4] bg-slate-900 min-h-[400px] md:min-h-full" 
-                      : "flex-1 bg-slate-950/50 min-h-[100px] md:min-h-full"
+                      ? "flex-[5] bg-slate-900 min-h-[500px] md:min-h-full" 
+                      : "flex-1 bg-slate-950/40 min-h-[80px] md:min-h-full hover:bg-slate-900/50"
                   )}
                 >
-                  {/* Background Glow sutil */}
+                  {/* Glow effect */}
                   <div className={cn(
                     "absolute inset-0 opacity-0 transition-opacity duration-700 bg-gradient-to-br",
                     service.color,
-                    isExpanded && "opacity-5"
+                    isExpanded && "opacity-10"
                   )} />
 
-                  <div className="relative h-full p-6 md:p-10 flex flex-col justify-between z-10">
-                    {/* Header: Icon & ID */}
-                    <div className="flex items-center justify-between">
+                  <div className="relative h-full p-8 md:p-12 flex flex-col z-10">
+                    {/* Top: Icon & ID */}
+                    <div className="flex items-center justify-between mb-8">
                       <motion.div 
                         layout
                         className={cn(
                           "p-4 rounded-2xl bg-white/5 border border-white/10 transition-all duration-500",
-                          isExpanded && `bg-gradient-to-br ${service.color} ${service.shadow} border-none shadow-lg`
+                          isExpanded && `bg-gradient-to-br ${service.color} ${service.shadow} border-none shadow-xl scale-110`
                         )}
                       >
                         <service.icon className={cn(
@@ -119,43 +117,48 @@ export const Services = () => {
                           isExpanded ? "text-white" : "text-slate-500"
                         )} />
                       </motion.div>
+                      
                       <span className={cn(
-                        "font-black text-2xl md:text-4xl transition-colors duration-500",
-                        isExpanded ? "text-slate-700" : "text-slate-900"
+                        "font-black text-2xl md:text-5xl transition-colors duration-500",
+                        isExpanded ? "text-slate-700/50" : "text-slate-900"
                       )}>
                         {service.id}
                       </span>
                     </div>
 
-                    {/* Middle: Imagen Referencial (Solo visible si está expandido) */}
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.5, delay: 0.2 }}
-                          className="relative w-full h-40 md:h-64 my-6 overflow-hidden rounded-3xl border border-white/5"
-                        >
-                          <Image
-                            src={service.image}
-                            alt={service.title}
-                            fill
-                            className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                          />
-                          {/* Overlay para integrar la imagen al diseño oscuro */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    {/* Middle: Centered Image */}
+                    <div className="flex-1 flex items-center justify-center w-full">
+                      <AnimatePresence mode="wait">
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="relative w-full aspect-video md:aspect-[16/10] max-h-[300px] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl"
+                          >
+                            <Image
+                              src={service.image}
+                              alt={service.title}
+                              fill
+                              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
 
-                    {/* Footer: Title & Desc */}
-                    <div className="overflow-hidden">
+                    {/* Bottom: Title & Description */}
+                    <div className={cn(
+                      "mt-8 transition-all duration-500",
+                      !isExpanded && "md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2"
+                    )}>
                       <motion.h3 
                         layout="position"
                         className={cn(
-                          "font-bold text-white mb-4 transition-all duration-500",
-                          isExpanded ? "text-2xl md:text-3xl" : "text-lg md:rotate-[-90deg] md:whitespace-nowrap md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2"
+                          "font-black text-white transition-all duration-500 uppercase tracking-tighter",
+                          isExpanded ? "text-3xl md:text-4xl mb-4" : "text-lg md:rotate-[-90deg] md:whitespace-nowrap"
                         )}
                       >
                         {service.title}
@@ -164,18 +167,17 @@ export const Services = () => {
                       <AnimatePresence>
                         {isExpanded && (
                           <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            transition={{ duration: 0.4 }}
-                            className="max-w-md"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="max-w-xl"
                           >
-                            <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-6">
+                            <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-6">
                               {service.desc}
                             </p>
-                            <button className="flex items-center gap-2 text-white text-sm font-bold group">
-                              Consultar detalles
-                              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                            <button className="flex items-center gap-3 text-white text-sm font-black uppercase tracking-widest group bg-white/5 px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-all">
+                              Explorar Solución
+                              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform text-blue-400" />
                             </button>
                           </motion.div>
                         )}
@@ -188,21 +190,6 @@ export const Services = () => {
           </LayoutGroup>
         </div>
 
-        {/* Footer Info Móvil/Escritorio */}
-        <div className="mt-12 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5 pt-8">
-          <p className="text-slate-600 text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">
-            Nuestros pilares tecnológicos
-          </p>
-          <div className="hidden md:flex gap-4 text-slate-700 text-[10px] font-bold uppercase tracking-widest">
-            <span>Engineering</span>
-            <span>•</span>
-            <span>Security</span>
-            <span>•</span>
-            <span>Infrastructure</span>
-            <span>•</span>
-            <span>Automation</span>
-          </div>
-        </div>
       </div>
     </section>
   );

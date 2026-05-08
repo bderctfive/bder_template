@@ -14,15 +14,15 @@ import {
 } from "react-icons/fi";
 
 const FOOTER_LINKS = [
-  {
-    title: "Navegación",
-    links: [
-      { name: "Inicio", href: "#inicio" },
-      { name: "Servicios", href: "#servicios" },
-      { name: "Proyectos", href: "#proyectos" },
-      { name: "Sobre Nosotros", href: "#nosotros" },
-    ]
-  },
+  // {
+  //   title: "Navegación",
+  //   links: [
+  //     { name: "Inicio", href: "#inicio" },
+  //     { name: "Servicios", href: "#servicios" },
+  //     { name: "Proyectos", href: "#proyectos" },
+  //     { name: "Sobre Nosotros", href: "#nosotros" },
+  //   ]
+  // },
   {
     title: "Servicios",
     links: [
@@ -53,9 +53,7 @@ export const Footer = () => {
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white italic">B</div>
               <span className="text-xl font-black text-white tracking-tighter uppercase">Bder Template</span>
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed mb-6">
-              Ingeniería de software modular y arquitectura de sistemas de alto rendimiento desde Hermosillo, Sonora.
-            </p>
+       
             <div className="flex gap-4">
               <SocialIcon icon={FiLinkedin} href="#" />
               <SocialIcon icon={FiGithub} href="#" />

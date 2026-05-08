@@ -105,12 +105,9 @@ export const About = () => {
         </div>
 
         {/* Carrusel Infinito */}
-        <div className="relative mt-24 py-12 border-y border-white/5 bg-slate-900/20">
-          <p className="text-center text-slate-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">
-            Stack Tecnológico de Alto Rendimiento
-          </p>
+        <div className="relative mt-24 py-12 bg-slate-1800/20">
 
-          <div className="space-y-8">
+         
             <div className="flex overflow-hidden">
               <motion.div 
                 className="flex gap-4 flex-nowrap"
@@ -125,9 +122,6 @@ export const About = () => {
             </div>
           </div>
 
-          <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-950 to-transparent z-20" />
-          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-950 to-transparent z-20" />
-        </div>
       </div>
     </section>
   );

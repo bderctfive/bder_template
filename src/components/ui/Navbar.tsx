@@ -78,7 +78,7 @@ export const Navbar = () => {
         {/* Brand Logo */}
         <div className="flex items-center">
           <a href="#inicio" className="font-sans font-bold text-sm tracking-tight text-foreground select-none">
-            BcTech
+            BCTech
           </a>
         </div>
 

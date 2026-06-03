@@ -49,7 +49,7 @@ export const Contact = () => {
               <ContactInfo 
                 icon={Phone} 
                 title={t("contact.info.phone")} 
-                detail="+52 (662) 000 0000" 
+                detail="+52 660 210 2997" 
               />
             </div>
           </motion.div>

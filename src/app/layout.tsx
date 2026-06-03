@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BcTech",
+  title: "BCTech",
   description: "Desarrollo modular con Next.js",
 };
 

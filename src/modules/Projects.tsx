@@ -24,7 +24,7 @@ interface ProjectData {
 const PROJECTS: ProjectData[] = [
   {
     id: "buyer-one",
-    title: "Buyer One",
+    title: "Buyer 1",
     tagKey: "projects.buyerone.tag",
     descKey: "projects.buyerone.desc",
     tech: ["Angular", "Flutter", "FastAPI"],
@@ -34,7 +34,7 @@ const PROJECTS: ProjectData[] = [
   },
   {
     id: "bder-rt",
-    title: "BcTech Real-Time",
+    title: "BCTech Real-Time",
     tagKey: "projects.bder.tag",
     descKey: "projects.bder.desc",
     tech: ["Next.js", "WebRTC", "PostgreSQL"],
@@ -132,7 +132,7 @@ export const Projects = () => {
               <div className="p-6 md:p-8 md:col-span-7 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border min-h-[300px]">
                 <div>
                   <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-500">{t(selectedProject.tagKey)}</span>
-                  <h3 className="text-xl font-bold text-foreground mt-1 mb-4 tracking-tight">{selectedProject.title}</h3>
+                  <h3 className="text-xl font-bold text-white mt-1 mb-4 tracking-tight">{selectedProject.title}</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed mb-6">{t(selectedProject.descKey)}</p>
                   
                   <div className="flex flex-wrap gap-2 mb-6">
@@ -205,7 +205,7 @@ const BentoCard = ({ project, onClick, t }: BentoCardProps) => {
             </span>
           )}
         </div>
-        <h3 className="text-lg font-bold text-foreground tracking-tight mb-2 flex items-center gap-1.5">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-2 flex items-center gap-1.5">
           {project.title}
           <Eye size={12} className="opacity-0 group-hover:opacity-60 transition-opacity text-neutral-500" />
         </h3>

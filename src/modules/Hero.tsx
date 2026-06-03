@@ -112,11 +112,27 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <Button variant="default" size="default" className="group h-10 px-5 text-xs font-semibold rounded-md w-full sm:w-auto justify-center">
+              <Button 
+                variant="default" 
+                size="default" 
+                className="group h-10 px-5 text-xs font-semibold rounded-md w-full sm:w-auto justify-center"
+                onClick={() => {
+                  const el = document.getElementById("contacto");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
                 {t("hero.btn.start")}
                 <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </Button>
-              <Button variant="outline" size="default" className="h-10 px-5 text-xs font-medium rounded-md w-full sm:w-auto justify-center">
+              <Button 
+                variant="outline" 
+                size="default" 
+                className="h-10 px-5 text-xs font-medium rounded-md w-full sm:w-auto justify-center"
+                onClick={() => {
+                  const el = document.getElementById("servicios");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
                 {t("hero.btn.services")}
               </Button>
             </div>

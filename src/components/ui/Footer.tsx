@@ -51,7 +51,7 @@ export const Footer = () => {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <span className="font-sans font-bold text-sm tracking-tight text-foreground select-none">
-                BcTech
+                BCTech
               </span>
             </div>
        
@@ -107,7 +107,7 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-550 text-[9px] font-mono font-bold uppercase tracking-wider">
-          <p>© {new Date().getFullYear()} BcTech. {t("footer.rights")}</p>
+          <p>© {new Date().getFullYear()} BCTech. {t("footer.rights")}</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-foreground transition-colors">{t("footer.privacy")}</a>
             <a href="#" className="hover:text-foreground transition-colors">{t("footer.terms")}</a>

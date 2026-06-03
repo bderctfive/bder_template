@@ -8,12 +8,9 @@ import { Contact } from "@/modules/Contact";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-slate-950 selection:bg-blue-500/30">
-      {/* 
-          Capa de textura: Un ruido sutil que hace que los degradados se vean 
-          más suaves y profesionales (puedes omitirlo si prefieres plano) 
-      */}
-      <div className="fixed inset-0 z-0 opacity-[0.03] pointer-events-none bg-[url('/noise.png')]" />
+    <div className="relative min-h-screen bg-background text-foreground selection:bg-neutral-500/20 antialiased overflow-x-hidden">
+      {/* Grid backdrop */}
+      <div className="fixed inset-0 z-0 pointer-events-none grid-bg" />
 
       <Navbar />
 
@@ -27,7 +24,7 @@ export default function Home() {
             Contenedor de secciones: 
             Añadimos espaciado consistente y un ancho máximo para pantallas grandes 
         */}
-        <div className="space-y-24 md:space-y-32 pb-24">
+        <div className="space-y-8 md:space-y-12 pb-16">
           
           <section id="servicios" className="scroll-mt-20">
             <Services />

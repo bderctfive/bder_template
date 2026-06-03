@@ -1,193 +1,272 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
+import React, { useState, useRef } from 'react';
+import { motion } from "framer-motion";
 import { 
   Laptop, 
-  ShieldCheck, 
+  Monitor, 
   Cpu, 
   Cloud, 
   Activity, 
-  ArrowRight 
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
+import { translations } from "@/lib/translations";
 
-const SERVICES = [
+type TranslationKey = keyof typeof translations['es'];
+
+interface ServiceData {
+  id: string;
+  titleKey: TranslationKey;
+  descKey: TranslationKey;
+  icon: any;
+  image: string;
+  gradientClass: string;
+  gridClass: string;
+}
+
+const SERVICES: ServiceData[] = [
   {
     id: "01",
-    title: "Software & Apps",
-    desc: "Desarrollo de ecosistemas digitales escalables con tecnologías de vanguardia como Next.js y Python.",
+    titleKey: "services.01.title",
+    descKey: "services.01.desc",
     icon: Laptop,
-    image: "/images/services/software.webp",
-    color: "from-blue-500 to-cyan-400",
-    shadow: "shadow-blue-500/20"
+    image: "/images/services/software_dev.png",
+    gradientClass: "from-blue-500/10 to-transparent",
+    gridClass: "col-span-1 md:col-span-2"
   },
   {
     id: "02",
-    title: "Ciberseguridad",
-    desc: "Protección avanzada de datos y auditorías de vulnerabilidades para mantener tu empresa segura.",
-    icon: ShieldCheck,
-    image: "/images/services/security.jpg",
-    color: "from-red-500 to-orange-400",
-    shadow: "shadow-red-500/20"
+    titleKey: "services.02.title",
+    descKey: "services.02.desc",
+    icon: Monitor,
+    image: "/images/services/support_hardware.png",
+    gradientClass: "from-red-500/10 to-transparent",
+    gridClass: "col-span-1 md:col-span-2"
   },
   {
     id: "03",
-    title: "Infraestructura & TI",
-    desc: "Optimización de servidores y soporte técnico especializado para una operatividad 24/7.",
+    titleKey: "services.03.title",
+    descKey: "services.03.desc",
     icon: Cpu,
-    image: "/images/services/infra.jpg",
-    color: "from-emerald-500 to-teal-400",
-    shadow: "shadow-emerald-500/20"
+    image: "/images/services/infra_servers.png",
+    gradientClass: "from-emerald-500/10 to-transparent",
+    gridClass: "col-span-1 md:col-span-2"
   },
   {
     id: "04",
-    title: "Cloud Solutions",
-    desc: "Migración y gestión de servicios en la nube (AWS/Azure) para máxima disponibilidad global.",
+    titleKey: "services.04.title",
+    descKey: "services.04.desc",
     icon: Cloud,
-    image: "/images/services/cloud.jpg",
-    color: "from-purple-500 to-pink-400",
-    shadow: "shadow-purple-500/20"
+    image: "/images/services/cloud_network.png",
+    gradientClass: "from-purple-500/10 to-transparent",
+    gridClass: "col-span-1 md:col-span-3"
   },
   {
     id: "05",
-    title: "Automatización",
-    desc: "Integración de procesos inteligentes para reducir costos operativos y errores humanos.",
+    titleKey: "services.05.title",
+    descKey: "services.05.desc",
     icon: Activity,
-    image: "/images/services/automation.jpg",
-    color: "from-amber-500 to-yellow-400",
-    shadow: "shadow-amber-500/20"
+    image: "/images/services/process_automation.png",
+    gradientClass: "from-amber-500/10 to-transparent",
+    gridClass: "col-span-1 md:col-span-3"
   }
 ];
 
 export const Services = () => {
-  const [expandedId, setExpandedId] = useState<string | null>("01");
+  const [activeSlide, setActiveSlide] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    
+    // Only track centering on mobile
+    if (window.innerWidth >= 768) return;
+    
+    const center = container.scrollLeft + container.clientWidth / 2;
+    
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    
+    Array.from(container.children).forEach((child, index) => {
+      const childEl = child as HTMLElement;
+      const childCenter = childEl.offsetLeft + childEl.clientWidth / 2;
+      const distance = Math.abs(center - childCenter);
+      
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+    
+    setActiveSlide(closestIndex);
+  };
+
+  const scrollTo = (index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const cardEl = container.children[index] as HTMLElement;
+    
+    if (cardEl) {
+      container.scrollTo({
+        left: cardEl.offsetLeft - (container.clientWidth - cardEl.clientWidth) / 2,
+        behavior: 'smooth'
+      });
+      setActiveSlide(index);
+    }
+  };
 
   return (
-    <section className="py-24 bg-slate-950 overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="mb-16 text-left">
-          <motion.h2 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase"
+    <section className="py-12 md:py-16 bg-transparent overflow-hidden relative">
+      <div className="container mx-auto max-w-5xl px-6">
+        
+        {/* Section Header */}
+        <div className="mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-1 text-left"
           >
-            Soluciones <br /> <span className="text-slate-800">Modulares.</span>
-          </motion.h2>
+            <span className="text-[10px] font-mono tracking-wider uppercase text-neutral-500">{t("services.tag")}</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+              {t("services.title")}
+            </h2>
+          </motion.div>
         </div>
 
-        <div className="flex flex-col md:flex-row h-auto md:h-[700px] gap-4">
-          <LayoutGroup>
-            {SERVICES.map((service) => {
-              const isExpanded = expandedId === service.id;
-              
-              return (
-                <motion.div
-                  key={service.id}
-                  layout
-                  onMouseEnter={() => setExpandedId(service.id)}
-                  onClick={() => setExpandedId(service.id)}
-                  className={cn(
-                    "relative overflow-hidden cursor-pointer rounded-[3rem] border border-white/10 transition-all duration-500 ease-in-out flex flex-col",
-                    isExpanded 
-                      ? "flex-[5] bg-slate-900 min-h-[500px] md:min-h-full" 
-                      : "flex-1 bg-slate-950/40 min-h-[80px] md:min-h-full hover:bg-slate-900/50"
-                  )}
-                >
-                  {/* Glow effect */}
-                  <div className={cn(
-                    "absolute inset-0 opacity-0 transition-opacity duration-700 bg-gradient-to-br",
-                    service.color,
-                    isExpanded && "opacity-10"
-                  )} />
+        {/* Bento/Grid Layout (Hybrid: grid on desktop, horizontal scroll on mobile) */}
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className={cn(
+            "flex md:grid gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none no-scrollbar",
+            "pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 md:grid-cols-6 w-full"
+          )}
+        >
+          {SERVICES.map((service, idx) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              whileHover={{ y: -4 }}
+              className={cn(
+                "relative rounded-2xl border border-border bg-neutral-900/5 dark:bg-neutral-950/10 text-left",
+                "flex flex-col justify-between p-6 cursor-pointer transition-all duration-300 overflow-hidden group",
+                service.gridClass,
+                "w-[85vw] md:w-auto shrink-0 md:shrink snap-center"
+              )}
+            >
+              {/* Inner gradient highlight */}
+              <div className={cn("absolute inset-0 bg-gradient-to-b opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none", service.gradientClass)} />
 
-                  <div className="relative h-full p-8 md:p-12 flex flex-col z-10">
-                    {/* Top: Icon & ID */}
-                    <div className="flex items-center justify-between mb-8">
-                      <motion.div 
-                        layout
-                        className={cn(
-                          "p-4 rounded-2xl bg-white/5 border border-white/10 transition-all duration-500",
-                          isExpanded && `bg-gradient-to-br ${service.color} ${service.shadow} border-none shadow-xl scale-110`
-                        )}
-                      >
-                        <service.icon className={cn(
-                          "w-6 h-6 transition-colors duration-500",
-                          isExpanded ? "text-white" : "text-slate-500"
-                        )} />
-                      </motion.div>
-                      
-                      <span className={cn(
-                        "font-black text-2xl md:text-5xl transition-colors duration-500",
-                        isExpanded ? "text-slate-700/50" : "text-slate-900"
-                      )}>
-                        {service.id}
-                      </span>
-                    </div>
-
-                    {/* Middle: Centered Image */}
-                    <div className="flex-1 flex items-center justify-center w-full">
-                      <AnimatePresence mode="wait">
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                            className="relative w-full aspect-video md:aspect-[16/10] max-h-[300px] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl"
-                          >
-                            <Image
-                              src={service.image}
-                              alt={service.title}
-                              fill
-                              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Bottom: Title & Description */}
-                    <div className={cn(
-                      "mt-8 transition-all duration-500",
-                      !isExpanded && "md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2"
-                    )}>
-                      <motion.h3 
-                        layout="position"
-                        className={cn(
-                          "font-black text-white transition-all duration-500 uppercase tracking-tighter",
-                          isExpanded ? "text-3xl md:text-4xl mb-4" : "text-lg md:rotate-[-90deg] md:whitespace-nowrap"
-                        )}
-                      >
-                        {service.title}
-                      </motion.h3>
-                      
-                      <AnimatePresence>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="max-w-xl"
-                          >
-                            <p className="text-slate-400 text-base md:text-lg leading-relaxed mb-6">
-                              {service.desc}
-                            </p>
-                            <button className="flex items-center gap-3 text-white text-sm font-black uppercase tracking-widest group bg-white/5 px-6 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-all">
-                              Explorar Solución
-                              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform text-blue-400" />
-                            </button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+              <div>
+                {/* Header: Icon & ID */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-2 rounded bg-neutral-900/80 border border-border text-neutral-400">
+                    <service.icon className="w-4 h-4" />
                   </div>
-                </motion.div>
-              );
-            })}
-          </LayoutGroup>
+                  <span className="text-[10px] font-mono text-neutral-500 font-semibold tracking-wider">
+                    {service.id}
+                  </span>
+                </div>
+
+                {/* Info */}
+                <div>
+                  <h3 className="text-base font-bold text-foreground tracking-tight">
+                    {t(service.titleKey)}
+                  </h3>
+                  <p className="text-muted-foreground text-[11px] leading-relaxed mt-2">
+                    {t(service.descKey)}
+                  </p>
+                </div>
+
+                {/* Mockup Image */}
+                <div className="relative w-full aspect-[21/9] rounded-lg border border-border bg-neutral-900/10 dark:bg-neutral-950/20 overflow-hidden mt-4">
+                  <Image
+                    src={service.image}
+                    alt={t(service.titleKey)}
+                    fill
+                    className="object-cover transition-all duration-500 grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+                </div>
+              </div>
+
+              {/* Footer CTA */}
+              <div className="mt-4 flex items-center justify-between pt-2 border-t border-border/40">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="group rounded-md text-[10px] px-0 h-6 text-muted-foreground hover:text-foreground bg-transparent hover:bg-transparent justify-start"
+                >
+                  {t("services.btn.explore")}
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform ml-1" />
+                </Button>
+                <span className="text-[8px] font-mono text-neutral-500 uppercase tracking-widest">
+                  SYS {service.id}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Control bar (Only visible on mobile) */}
+        <div className="flex md:hidden items-center justify-between mt-6 px-2 max-w-xs mx-auto relative z-20">
+          {/* Index Counter */}
+          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest select-none">
+            {String(activeSlide + 1).padStart(2, '0')} / {String(SERVICES.length).padStart(2, '0')}
+          </span>
+
+          {/* Dots */}
+          <div className="flex gap-2">
+            {SERVICES.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => scrollTo(idx)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-300",
+                  activeSlide === idx ? "w-6 bg-foreground" : "w-1.5 bg-neutral-300 dark:bg-neutral-800"
+                )}
+                aria-label={`Ir al servicio ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Arrows */}
+          <div className="flex gap-2">
+            <button 
+              onClick={() => scrollTo(Math.max(0, activeSlide - 1))}
+              disabled={activeSlide === 0}
+              className={cn(
+                "w-7 h-7 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-neutral-900/5 dark:hover:bg-neutral-950/10 hover:border-neutral-400 dark:hover:border-neutral-800 transition-all duration-200",
+                activeSlide === 0 ? "opacity-25 pointer-events-none" : "opacity-100"
+              )}
+              aria-label="Servicio anterior"
+            >
+              <ChevronLeft size={13} />
+            </button>
+            <button 
+              onClick={() => scrollTo(Math.min(SERVICES.length - 1, activeSlide + 1))}
+              disabled={activeSlide === SERVICES.length - 1}
+              className={cn(
+                "w-7 h-7 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-neutral-900/5 dark:hover:bg-neutral-950/10 hover:border-neutral-400 dark:hover:border-neutral-800 transition-all duration-200",
+                activeSlide === SERVICES.length - 1 ? "opacity-25 pointer-events-none" : "opacity-100"
+              )}
+              aria-label="Siguiente servicio"
+            >
+              <ChevronRight size={13} />
+            </button>
+          </div>
         </div>
 
       </div>

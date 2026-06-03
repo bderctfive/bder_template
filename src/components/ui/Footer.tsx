@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react';
-import { motion } from "framer-motion";
-// Importamos todo desde Fi (Feather Icons) para mantener la consistencia visual
 import { 
   FiGithub, 
   FiLinkedin, 
@@ -12,49 +10,52 @@ import {
   FiMapPin, 
   FiArrowUp 
 } from "react-icons/fi";
+import { useLanguage } from "@/context/LanguageContext";
+import { translations } from "@/lib/translations";
 
-const FOOTER_LINKS = [
-  // {
-  //   title: "Navegación",
-  //   links: [
-  //     { name: "Inicio", href: "#inicio" },
-  //     { name: "Servicios", href: "#servicios" },
-  //     { name: "Proyectos", href: "#proyectos" },
-  //     { name: "Sobre Nosotros", href: "#nosotros" },
-  //   ]
-  // },
+type TranslationKey = keyof typeof translations['es'];
+
+interface FooterLinkGroup {
+  titleKey: TranslationKey;
+  links: { nameKey: TranslationKey; href: string }[];
+}
+
+const FOOTER_LINKS: FooterLinkGroup[] = [
   {
-    title: "Servicios",
+    titleKey: "nav.services",
     links: [
-      { name: "Software & Apps", href: "#servicios" },
-      { name: "Ciberseguridad", href: "#servicios" },
-      { name: "Infraestructura", href: "#servicios" },
-      { name: "Automatización", href: "#servicios" },
+      { nameKey: "hero.tag.software", href: "#servicios" },
+      { nameKey: "services.02.title", href: "#servicios" },
+      { nameKey: "hero.tag.infra", href: "#servicios" },
+      { nameKey: "hero.tag.auto", href: "#servicios" },
     ]
   }
 ];
 
 export const Footer = () => {
+  const { t } = useLanguage();
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="relative bg-slate-950 pt-24 pb-12 overflow-hidden border-t border-white/5">
-      {/* Glow decorativo sutil */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+    <footer className="relative bg-transparent pt-24 pb-12 overflow-hidden border-t border-border/50">
+      {/* Decorative center border line */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-neutral-500/10 to-transparent" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto max-w-5xl px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
-          {/* Columna 1: Brand & Bio */}
+          {/* Column 1: Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white italic">B</div>
-              <span className="text-xl font-black text-white tracking-tighter uppercase">Bder Template</span>
+              <span className="font-sans font-bold text-sm tracking-tight text-foreground select-none">
+                BcTech
+              </span>
             </div>
        
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <SocialIcon icon={FiLinkedin} href="#" />
               <SocialIcon icon={FiGithub} href="#" />
               <SocialIcon icon={FiTwitter} href="#" />
@@ -62,15 +63,15 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Columnas de Links */}
+          {/* Links Column */}
           {FOOTER_LINKS.map((group) => (
-            <div key={group.title}>
-              <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-6">{group.title}</h4>
-              <ul className="space-y-4">
+            <div key={group.titleKey}>
+              <h4 className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider mb-6">{t(group.titleKey)}</h4>
+              <ul className="space-y-3">
                 {group.links.map((link) => (
-                  <li key={link.name}>
-                    <a href={link.href} className="text-slate-500 hover:text-blue-400 text-sm transition-colors duration-300">
-                      {link.name}
+                  <li key={link.nameKey}>
+                    <a href={link.href} className="text-muted-foreground hover:text-foreground text-xs transition-colors duration-200">
+                      {t(link.nameKey)}
                     </a>
                   </li>
                 ))}
@@ -78,25 +79,26 @@ export const Footer = () => {
             </div>
           ))}
 
-          {/* Columna 4: Contacto Rápido */}
-          <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-6">Contacto</h4>
-            <div className="space-y-4 text-sm text-slate-500">
-              <div className="flex items-center gap-3 font-medium">
-                <FiMapPin size={16} className="text-blue-500" />
+          {/* Contact Column */}
+          <div className="lg:col-span-2">
+            <h4 className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider mb-6">{t("nav.contact")}</h4>
+            <div className="space-y-3.5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-3">
+                <FiMapPin size={14} className="text-neutral-500" />
                 <span>Hermosillo, Sonora, México</span>
               </div>
-              <div className="flex items-center gap-3 font-medium">
-                <FiMail size={16} className="text-blue-500" />
-                <span>contacto@bder.com</span>
+              <div className="flex items-center gap-3">
+                <FiMail size={14} className="text-neutral-500" />
+                <span>contact@bctech.com.mx</span>
               </div>
-              <div className="mt-6 pt-6 border-t border-white/5">
+              
+              <div className="pt-4 mt-4 border-t border-border/50">
                 <button 
                   onClick={scrollToTop}
-                  className="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest hover:text-blue-400 transition-colors group"
+                  className="flex items-center gap-2 text-foreground text-[10px] font-mono font-bold uppercase tracking-wider hover:text-muted-foreground transition-colors group"
                 >
-                  Volver arriba 
-                  <FiArrowUp size={14} className="group-hover:-translate-y-1 transition-transform" />
+                  {t("footer.top")}
+                  <FiArrowUp size={12} className="group-hover:-translate-y-0.5 transition-transform" />
                 </button>
               </div>
             </div>
@@ -104,11 +106,11 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 text-[10px] font-bold uppercase tracking-[0.2em]">
-          <p>© {new Date().getFullYear()} Bder Template. Todos los derechos reservados.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos</a>
+        <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-neutral-550 text-[9px] font-mono font-bold uppercase tracking-wider">
+          <p>© {new Date().getFullYear()} BcTech. {t("footer.rights")}</p>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-foreground transition-colors">{t("footer.privacy")}</a>
+            <a href="#" className="hover:text-foreground transition-colors">{t("footer.terms")}</a>
           </div>
         </div>
       </div>
@@ -116,14 +118,13 @@ export const Footer = () => {
   );
 };
 
-// Componente auxiliar para los iconos sociales
 const SocialIcon = ({ icon: Icon, href }: { icon: any, href: string }) => (
   <a 
     href={href} 
     target="_blank"
     rel="noopener noreferrer"
-    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-600 hover:border-blue-500 transition-all duration-300 shadow-lg hover:shadow-blue-600/20"
+    className="w-8 h-8 rounded-md bg-neutral-900/10 border border-border/60 flex items-center justify-center text-neutral-400 hover:text-foreground hover:bg-neutral-900 hover:border-border transition-all duration-200 shadow-subtle"
   >
-    <Icon size={18} />
+    <Icon size={14} />
   </a>
 );

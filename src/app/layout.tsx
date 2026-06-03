@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css"; // Esto debe estar aquí para que el error desaparezca
-
-const inter = Inter({ subsets: ["latin"] });
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Providers } from "./providers";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bder Template",
+  title: "BcTech",
   description: "Desarrollo modular con Next.js",
 };
 
@@ -15,9 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
-        {children}
+    <html lang="es" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

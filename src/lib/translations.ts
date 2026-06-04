@@ -98,6 +98,10 @@ export const translations = {
     "contact.error.fields": "Por favor, completa todos los campos del formulario.",
     "contact.error.email": "Por favor, ingresa un correo electrónico válido.",
     "contact.error.api": "Error de configuración de correo electrónico.",
+    "contact.error.name": "Por favor, ingresa un nombre válido (solo letras, espacios, puntos o guiones).",
+    "contact.error.name.too_short": "El nombre debe tener al menos 2 caracteres.",
+    "contact.error.message": "Por favor, escribe un mensaje válido con texto legible.",
+    "contact.error.message.too_short": "El mensaje debe tener al menos 10 caracteres.",
 
     // Footer
     "footer.rights": "Todos los derechos reservados.",
@@ -202,6 +206,10 @@ export const translations = {
     "contact.error.fields": "Please fill in all the form fields.",
     "contact.error.email": "Please enter a valid email address.",
     "contact.error.api": "Email configuration error.",
+    "contact.error.name": "Please enter a valid name (letters, spaces, dots, or hyphens only).",
+    "contact.error.name.too_short": "The name must be at least 2 characters long.",
+    "contact.error.message": "Please enter a valid message with legible text.",
+    "contact.error.message.too_short": "The message must be at least 10 characters long.",
 
     // Footer
     "footer.rights": "All rights reserved.",

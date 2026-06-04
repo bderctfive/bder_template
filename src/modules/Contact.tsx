@@ -13,7 +13,18 @@ export const Contact = () => {
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
-    category: "",
+    category: "software", // Default static code
+    message: "",
+    website: "" // Honeypot spam protection
+  });
+  const [touched, setTouched] = React.useState({
+    name: false,
+    email: false,
+    message: false
+  });
+  const [errors, setErrors] = React.useState({
+    name: "",
+    email: "",
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -22,24 +33,88 @@ export const Contact = () => {
     errorKey: string | null;
   }>({ success: null, errorKey: null });
 
-  // Update default category translation if user hasn't typed anything
-  React.useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      category: prev.category || t("hero.tag.software")
-    }));
-  }, [t]);
+  const validateField = React.useCallback((fieldName: string, value: string) => {
+    let error = "";
+    if (fieldName === "name") {
+      const trimmed = value.trim();
+      if (!trimmed) {
+        error = "contact.error.fields";
+      } else if (trimmed.length < 2) {
+        error = "contact.error.name.too_short";
+      } else if (!/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.\-']+$/.test(trimmed) || !/[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]/.test(trimmed)) {
+        error = "contact.error.name";
+      }
+    } else if (fieldName === "email") {
+      const trimmed = value.trim();
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!trimmed) {
+        error = "contact.error.fields";
+      } else if (!emailRegex.test(trimmed)) {
+        error = "contact.error.email";
+      }
+    } else if (fieldName === "message") {
+      const trimmed = value.trim();
+      if (!trimmed) {
+        error = "contact.error.fields";
+      } else if (trimmed.length < 10) {
+        error = "contact.error.message.too_short";
+      } else if (!/[a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ]/.test(trimmed)) {
+        error = "contact.error.message";
+      }
+    }
+    return error;
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
+    let processedValue = value;
+    if (name === "name") {
+      // Limpia en tiempo real cualquier carácter que no sea letra, espacio, punto, guion o apóstrofe
+      processedValue = value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.\-']/g, "");
+    }
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
+    }));
+
+    if (name in touched && touched[name as keyof typeof touched]) {
+      const error = validateField(name, processedValue);
+      setErrors(prev => ({
+        ...prev,
+        [name]: error
+      }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate all fields
+    const nameError = validateField("name", formData.name);
+    const emailError = validateField("email", formData.email);
+    const messageError = validateField("message", formData.message);
+
+    if (nameError || emailError || messageError) {
+      setTouched({ name: true, email: true, message: true });
+      setErrors({ name: nameError, email: emailError, message: messageError });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus({ success: null, errorKey: null });
 
@@ -50,15 +125,22 @@ export const Contact = () => {
         setFormData({
           name: "",
           email: "",
-          category: t("hero.tag.software"),
-          message: ""
+          category: "software",
+          message: "",
+          website: ""
         });
+        setTouched({ name: false, email: false, message: false });
+        setErrors({ name: "", email: "", message: "" });
       } else {
         let errorKey = "contact.error.generic";
         if (result.error === "missing_name" || result.error === "missing_email" || result.error === "missing_category" || result.error === "missing_message") {
           errorKey = "contact.error.fields";
+        } else if (result.error === "invalid_name" || result.error === "name_length_invalid") {
+          errorKey = "contact.error.name";
         } else if (result.error === "invalid_email") {
           errorKey = "contact.error.email";
+        } else if (result.error === "invalid_message" || result.error === "message_length_invalid") {
+          errorKey = "contact.error.message";
         } else if (result.error === "missing_api_key" || result.error === "resend_error") {
           errorKey = "contact.error.api";
         }
@@ -125,6 +207,20 @@ export const Contact = () => {
             className="lg:col-span-7 relative p-6 md:p-8 rounded-2xl bg-neutral-900/5 dark:bg-neutral-900/10 border border-border shadow-subtle backdrop-blur-md"
           >
             <form className="space-y-5" onSubmit={handleSubmit}>
+              {/* Honeypot spam protection field (hidden from screen-readers and visual users) */}
+              <div className="absolute opacity-0 pointer-events-none w-0 h-0 overflow-hidden" aria-hidden="true">
+                <label htmlFor="website-field">Leave this field empty if you are human</label>
+                <input
+                  id="website-field"
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputGroup 
                   label={t("contact.form.name")} 
@@ -133,6 +229,11 @@ export const Contact = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  maxLength={100}
+                  autoComplete="name"
+                  pattern="^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s.\-']+$"
+                  error={touched.name && errors.name ? t(errors.name as any) : ""}
                 />
                 <InputGroup 
                   label={t("contact.form.email")} 
@@ -141,6 +242,10 @@ export const Contact = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  maxLength={100}
+                  autoComplete="email"
+                  error={touched.email && errors.email ? t(errors.email as any) : ""}
                 />
               </div>
               
@@ -151,13 +256,13 @@ export const Contact = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full bg-neutral-50 dark:bg-neutral-950 border border-border rounded-md px-3.5 py-2.5 text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 focus:ring-ring transition-all appearance-none cursor-pointer"
+                    className="w-full bg-neutral-50 dark:bg-neutral-950 border border-border rounded-md px-3.5 py-2.5 text-base md:text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 focus:ring-ring transition-all appearance-none cursor-pointer"
                   >
-                    <option value={t("hero.tag.software")}>{t("hero.tag.software")}</option>
-                    <option value={t("hero.tag.infra")}>{t("hero.tag.infra")}</option>
-                    <option value={t("hero.tag.auto")}>{t("hero.tag.auto")}</option>
-                    <option value={t("services.02.title")}>{t("services.02.title")}</option>
-                    <option value="Otro / Other">Otro / Other</option>
+                    <option value="software">{t("hero.tag.software")}</option>
+                    <option value="infra">{t("hero.tag.infra")}</option>
+                    <option value="auto">{t("hero.tag.auto")}</option>
+                    <option value="support">{t("services.02.title")}</option>
+                    <option value="other">Otro / Other</option>
                   </select>
                   <div className="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-neutral-500 text-xs">
                     ▼
@@ -171,11 +276,22 @@ export const Contact = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  maxLength={2000}
                   rows={4} 
-                  className="w-full bg-neutral-50 dark:bg-neutral-950 border border-border rounded-md px-3.5 py-2.5 text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 focus:ring-ring transition-all resize-none"
+                  className={`w-full bg-neutral-50 dark:bg-neutral-950 border rounded-md px-3.5 py-2.5 text-base md:text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 transition-all resize-none ${
+                    touched.message && errors.message
+                      ? "border-amber-500 focus:ring-amber-500 focus:border-amber-500 dark:border-amber-500/50"
+                      : "border-border focus:ring-ring"
+                  }`}
                   placeholder={t("contact.form.msg.placeholder")}
                 />
+                {touched.message && errors.message && (
+                  <span className="block text-[10px] font-mono text-amber-600 dark:text-amber-400 mt-1 ml-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+                    {t(errors.message as any)}
+                  </span>
+                )}
               </div>
 
               {submitStatus.success !== null && (
@@ -241,7 +357,12 @@ const InputGroup = ({
   type, 
   name, 
   value, 
-  onChange 
+  onChange,
+  onBlur,
+  maxLength,
+  autoComplete,
+  pattern,
+  error
 }: { 
   label: string; 
   placeholder: string; 
@@ -249,17 +370,35 @@ const InputGroup = ({
   name: string; 
   value: string; 
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  maxLength?: number;
+  autoComplete?: string;
+  pattern?: string;
+  error?: string;
 }) => (
-  <div className="space-y-1.5">
+  <div className="space-y-1.5 w-full">
     <label className="text-[10px] font-mono font-bold text-neutral-500 uppercase tracking-wider ml-0.5">{label}</label>
     <input 
       type={type} 
       name={name}
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
       required
-      className="w-full bg-neutral-50 dark:bg-neutral-950 border border-border rounded-md px-3.5 py-2.5 text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 focus:ring-ring transition-all"
+      maxLength={maxLength}
+      autoComplete={autoComplete}
+      pattern={pattern}
+      className={`w-full bg-neutral-50 dark:bg-neutral-950 border rounded-md px-3.5 py-2.5 text-base md:text-xs text-foreground placeholder:text-neutral-450 dark:placeholder:text-neutral-600 focus:outline-none focus:ring-1 transition-all ${
+        error 
+          ? "border-amber-500 focus:ring-amber-500 focus:border-amber-500 dark:border-amber-500/50" 
+          : "border-border focus:ring-ring"
+      }`}
       placeholder={placeholder}
     />
+    {error && (
+      <span className="block text-[10px] font-mono text-amber-600 dark:text-amber-400 mt-1 ml-0.5 animate-in fade-in slide-in-from-top-1 duration-200">
+        {error}
+      </span>
+    )}
   </div>
 );

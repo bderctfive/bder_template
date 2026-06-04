@@ -44,7 +44,7 @@ export const Footer = () => {
       {/* Decorative center border line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-neutral-500/10 to-transparent" />
 
-      <div className="container mx-auto max-w-5xl px-6 relative z-10">
+      <div className="container mx-auto max-w-[83rem] px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           {/* Column 1: Brand */}

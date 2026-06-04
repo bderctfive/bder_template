@@ -60,7 +60,7 @@ const HeroSection = () => {
       {/* Light glow overlay to mimic premium SaaS header */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-neutral-200/5 to-transparent blur-[120px] pointer-events-none" />
 
-      <div className="container mx-auto max-w-5xl px-6 relative z-10">
+      <div className="container mx-auto max-w-[83rem] px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Column: Heading and Actions */}

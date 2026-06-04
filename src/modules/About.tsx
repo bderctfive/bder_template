@@ -28,7 +28,7 @@ export const About = () => {
       {/* Background Decor */}
       <div className="absolute top-1/2 left-0 w-64 h-64 bg-neutral-200/5 rounded-full blur-[100px] -translate-y-1/2 pointer-events-none" />
       
-      <div className="container mx-auto max-w-5xl px-6 relative z-10">
+      <div className="container mx-auto max-w-[83rem] px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16 mb-20">
           
           {/* Left Side: Workspace Image Panel */}

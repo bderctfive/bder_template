@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,10 @@ export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isHoveredRef = useRef(false);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { language, setLanguage, t } = useLanguage();
   const { resolvedTheme, setTheme } = useTheme();
@@ -27,10 +31,30 @@ export const Navbar = () => {
       // Scrolled threshold
       setIsScrolled(currentScrollY > 20);
 
+      // If hovered, don't trigger hiding, and clear any pending hide timers
+      if (isHoveredRef.current) {
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current);
+          hideTimeoutRef.current = null;
+        }
+        setIsVisible(true);
+        lastScrollY = currentScrollY;
+        return;
+      }
+
       // Hide on scroll down, show on scroll up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
+        if (!hideTimeoutRef.current) {
+          hideTimeoutRef.current = setTimeout(() => {
+            setIsVisible(false);
+            hideTimeoutRef.current = null;
+          }, 450); // 450ms delay before hiding
+        }
       } else {
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current);
+          hideTimeoutRef.current = null;
+        }
         setIsVisible(true);
       }
       
@@ -38,7 +62,12 @@ export const Navbar = () => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+    };
   }, []);
 
   const navItems = [
@@ -57,7 +86,7 @@ export const Navbar = () => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
-  const showNavbar = isVisible || isMobileMenuOpen;
+  const showNavbar = isVisible || isMobileMenuOpen || isHovered;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6 pointer-events-none">
@@ -68,8 +97,21 @@ export const Navbar = () => {
           opacity: showNavbar ? 1 : 0 
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
+        onMouseEnter={() => {
+          setIsHovered(true);
+          isHoveredRef.current = true;
+          if (hideTimeoutRef.current) {
+            clearTimeout(hideTimeoutRef.current);
+            hideTimeoutRef.current = null;
+          }
+          setIsVisible(true);
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          isHoveredRef.current = false;
+        }}
         className={cn(
-          "pointer-events-auto relative flex items-center justify-between w-full max-w-5xl px-6 py-3 rounded-full transition-all duration-300 border",
+          "pointer-events-auto relative flex items-center justify-between w-full max-w-[83rem] px-6 py-3 rounded-full transition-all duration-300 border",
           isScrolled 
             ? "bg-background/80 backdrop-blur-md border-border shadow-subtle" 
             : "bg-transparent border-transparent"

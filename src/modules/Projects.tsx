@@ -29,7 +29,7 @@ const PROJECTS: ProjectData[] = [
     descKey: "projects.buyerone.desc",
     tech: ["Angular", "Flutter", "FastAPI"],
     color: "from-blue-500/10 to-transparent",
-    gridClass: "md:col-span-2 h-[340px]",
+    gridClass: "md:col-span-2 h-[360px]",
     status: "public"
   },
   {
@@ -39,7 +39,7 @@ const PROJECTS: ProjectData[] = [
     descKey: "projects.bder.desc",
     tech: ["Next.js", "WebRTC", "PostgreSQL"],
     color: "from-emerald-500/10 to-transparent",
-    gridClass: "md:col-span-1 h-[340px]",
+    gridClass: "md:col-span-1 h-[360px]",
     status: "public"
   },
   {
@@ -49,7 +49,7 @@ const PROJECTS: ProjectData[] = [
     descKey: "projects.ghost.desc",
     tech: ["Rust", "Vault", "WireGuard"],
     color: "from-purple-500/10 to-transparent",
-    gridClass: "md:col-span-1 h-[340px]",
+    gridClass: "md:col-span-1 h-[360px]",
     status: "mystery"
   },
   {
@@ -59,7 +59,7 @@ const PROJECTS: ProjectData[] = [
     descKey: "projects.neural.desc",
     tech: ["Python", "TensorFlow", "FastAPI"],
     color: "from-amber-500/10 to-transparent",
-    gridClass: "md:col-span-2 h-[340px]",
+    gridClass: "md:col-span-2 h-[360px]",
     status: "mystery"
   }
 ];
@@ -70,7 +70,7 @@ export const Projects = () => {
 
   return (
     <section className="py-12 md:py-16 bg-transparent overflow-hidden relative">
-      <div className="container mx-auto max-w-5xl px-6 mb-12">
+      <div className="container mx-auto max-w-[83rem] px-6 mb-12">
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ export const Projects = () => {
       </div>
 
       {/* Bento Grid layout */}
-      <div className="container mx-auto max-w-5xl px-6">
+      <div className="container mx-auto max-w-[83rem] px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {PROJECTS.map((project) => (
             <BentoCard 
@@ -117,7 +117,7 @@ export const Projects = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: 15 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto md:overflow-hidden bg-neutral-900 border border-border rounded-xl shadow-lg z-20 grid grid-cols-1 md:grid-cols-12"
+              className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto md:overflow-hidden bg-neutral-900 border border-border rounded-xl shadow-lg z-20 grid grid-cols-1 md:grid-cols-12 dark"
             >
               {/* Close Button */}
               <button 
@@ -194,28 +194,28 @@ const BentoCard = ({ project, onClick, t }: BentoCardProps) => {
       <div className={cn("absolute inset-0 bg-gradient-to-b opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none", project.color)} />
       
       {/* Top Section: Info text */}
-      <div className="p-6 relative z-10 w-full md:max-w-[450px]">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-[9px] font-mono tracking-wider uppercase text-neutral-500">
+      <div className="p-6 md:p-7 relative z-10 w-full md:max-w-[520px]">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs font-mono tracking-wider uppercase text-neutral-500">
             {t(project.tagKey)}
           </span>
           {isMystery && (
-            <span className="text-[8px] font-mono bg-red-500/10 dark:bg-red-500/5 text-red-500 px-1.5 py-0.5 rounded border border-red-500/10 uppercase tracking-widest">
+            <span className="text-[9px] font-mono bg-red-500/10 dark:bg-red-500/5 text-red-500 px-2 py-0.5 rounded border border-red-500/10 uppercase tracking-widest font-semibold">
               SECURE
             </span>
           )}
         </div>
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-2 flex items-center gap-1.5">
+        <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-3 flex items-center gap-2">
           {project.title}
-          <Eye size={12} className="opacity-0 group-hover:opacity-60 transition-opacity text-neutral-500" />
+          <Eye size={16} className="opacity-0 group-hover:opacity-60 transition-opacity text-neutral-500" />
         </h3>
-        <p className="text-muted-foreground text-[11px] leading-relaxed line-clamp-2">
+        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
           {t(project.descKey)}
         </p>
       </div>
 
       {/* Bottom Section: Mockup display */}
-      <div className="flex-1 w-full relative overflow-hidden flex items-end justify-center px-6">
+      <div className="flex-1 w-full relative overflow-hidden flex items-end justify-center px-6 md:px-7">
         <div className="w-full relative h-[160px] md:h-[180px] rounded-t-lg border-t border-x border-border/80 bg-neutral-950 overflow-hidden shadow-subtle group-hover:border-border transition-colors">
           <MockupVisualizer projectId={project.id} />
         </div>
@@ -229,79 +229,79 @@ const MockupVisualizer = ({ projectId, isEnlarged = false }: { projectId: string
   switch (projectId) {
     case "buyer-one":
       return (
-        <div className="p-4 space-y-3 font-sans w-full h-full flex flex-col justify-start">
+        <div className="p-4 md:p-5 space-y-4 font-sans w-full h-full flex flex-col justify-start">
           <div className="flex justify-between items-center border-b border-border/50 pb-2">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">ERP Sales Panel</span>
-            <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/5 px-1.5 py-0.2 rounded">+14.2%</span>
+            <span className="text-[11px] md:text-xs font-mono text-neutral-400 uppercase tracking-wider">ERP Sales Panel</span>
+            <span className="text-[10px] md:text-[11px] font-mono text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded font-bold">+14.2%</span>
           </div>
-          <div className="space-y-2">
-            <div className="h-2 w-10/12 bg-neutral-900 rounded" />
-            <div className="h-2 w-7/12 bg-neutral-900 rounded" />
+          <div className="space-y-2.5">
+            <div className="h-2.5 w-10/12 bg-neutral-900 rounded" />
+            <div className="h-2.5 w-7/12 bg-neutral-900 rounded" />
           </div>
           {/* Simple simulated graphic */}
-          <div className="flex items-end gap-1.5 h-16 pt-2 w-full justify-between select-none">
-            <div className="w-full bg-neutral-900 rounded-t h-4" />
-            <div className="w-full bg-neutral-900 rounded-t h-8" />
+          <div className="flex items-end gap-2 h-20 md:h-24 pt-2 w-full justify-between select-none">
             <div className="w-full bg-neutral-900 rounded-t h-6" />
             <div className="w-full bg-neutral-900 rounded-t h-12" />
-            <div className="w-full bg-blue-500/60 rounded-t h-14" />
-            <div className="w-full bg-blue-500 rounded-t h-[72px]" />
+            <div className="w-full bg-neutral-900 rounded-t h-9" />
+            <div className="w-full bg-neutral-900 rounded-t h-16" />
+            <div className="w-full bg-blue-500/60 rounded-t h-20" />
+            <div className="w-full bg-blue-500 rounded-t h-[88px]" />
           </div>
         </div>
       );
 
     case "bder-rt":
       return (
-        <div className="p-4 font-mono text-[9px] text-neutral-500 space-y-2.5 w-full h-full flex flex-col justify-between">
-          <div className="flex justify-between items-center text-neutral-400">
+        <div className="p-4 md:p-5 font-mono text-[10px] md:text-xs text-neutral-400 space-y-3.5 w-full h-full flex flex-col justify-between">
+          <div className="flex justify-between items-center text-neutral-300">
             <span className="flex items-center gap-1.5 font-bold text-red-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
               LIVE FEED
             </span>
             <span>42 fps</span>
           </div>
           {/* Simulated stream mockup box */}
-          <div className="flex-1 min-h-[70px] bg-neutral-900/60 border border-border/40 rounded flex items-center justify-center relative overflow-hidden">
-            <Activity className="w-6 h-6 text-neutral-700 animate-pulse" />
-            <div className="absolute bottom-1 right-1.5 text-[8px] text-neutral-600">
+          <div className="flex-1 min-h-[80px] bg-neutral-900/60 border border-border/40 rounded flex items-center justify-center relative overflow-hidden my-1">
+            <Activity className="w-8 h-8 text-neutral-700 animate-pulse" />
+            <div className="absolute bottom-1.5 right-2 text-[9px] md:text-[10px] text-neutral-500">
               29°05'56"N 110°57'15"W
             </div>
           </div>
-          <div className="flex justify-between text-[8px]">
-            <span>LATENCY: <span className="text-emerald-400">42ms</span></span>
-            <span>BW: <span className="text-blue-400">4.8 MB/s</span></span>
+          <div className="flex justify-between text-[9px] md:text-[10px]">
+            <span>LATENCY: <span className="text-emerald-400 font-bold">42ms</span></span>
+            <span>BW: <span className="text-blue-400 font-bold">4.8 MB/s</span></span>
           </div>
         </div>
       );
 
     case "ghost":
       return (
-        <div className="p-4 font-mono text-[9px] text-neutral-500 space-y-2 w-full h-full flex flex-col justify-start">
+        <div className="p-4 md:p-5 font-mono text-[10px] md:text-xs text-neutral-400 space-y-2.5 w-full h-full flex flex-col justify-start">
           <div className="flex items-center justify-between border-b border-border/50 pb-2">
-            <span className="uppercase text-neutral-400 font-bold flex items-center gap-1">
-              <Lock size={10} className="text-purple-400" /> Secure Tunnel
+            <span className="uppercase text-neutral-300 font-bold flex items-center gap-1.5">
+              <Lock size={12} className="text-purple-400" /> Secure Tunnel
             </span>
-            <span className="text-neutral-600 text-[8px]">mx-tunnel-0</span>
+            <span className="text-neutral-500 text-[9px] md:text-[10px]">mx-tunnel-0</span>
           </div>
-          <div className="space-y-1 pt-1">
-            <div className="text-purple-400"># wg-quick up wg0</div>
+          <div className="space-y-1.5 pt-1.5 text-[9px] md:text-[11px]">
+            <div className="text-purple-400 font-semibold"># wg-quick up wg0</div>
             <div>[+] Initializing handshake...</div>
-            <div className="text-emerald-400">[+] Tunnel status: ESTABLISHED</div>
-            <div className="text-neutral-600 select-none">Key: AE09...31BF9902X</div>
+            <div className="text-emerald-400 font-semibold">[+] Tunnel status: ESTABLISHED</div>
+            <div className="text-neutral-500 select-none">Key: AE09...31BF9902X</div>
           </div>
         </div>
       );
 
     case "neural":
       return (
-        <div className="p-4 space-y-3 font-sans w-full h-full flex flex-col justify-between">
+        <div className="p-4 md:p-5 space-y-4 font-sans w-full h-full flex flex-col justify-between">
           <div className="flex justify-between items-center border-b border-border/50 pb-2">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">AI Optimizer</span>
-            <span className="text-[9px] font-mono text-purple-400 bg-purple-500/5 px-1.5 py-0.2 rounded font-bold">ACTIVE</span>
+            <span className="text-[11px] md:text-xs font-mono text-neutral-400 uppercase tracking-wider">AI Optimizer</span>
+            <span className="text-[10px] md:text-[11px] font-mono text-purple-400 bg-purple-500/5 px-2 py-0.5 rounded font-bold">ACTIVE</span>
           </div>
           {/* Simulated node connection flow map */}
-          <div className="flex justify-around items-center h-20 relative pt-2">
-            <div className="w-8 h-8 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-neutral-400 font-mono text-[8px] z-10">IN</div>
+          <div className="flex justify-around items-center h-24 md:h-28 relative pt-2">
+            <div className="w-10 h-10 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-neutral-400 font-mono text-[10px] z-10">IN</div>
             
             {/* SVG Connecting pathways */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
@@ -312,11 +312,11 @@ const MockupVisualizer = ({ projectId, isEnlarged = false }: { projectId: string
             </svg>
 
             <div className="space-y-4 z-10 flex flex-col justify-center">
-              <div className="w-6 h-6 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-blue-400 font-mono text-[8px]">N1</div>
-              <div className="w-6 h-6 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-purple-400 font-mono text-[8px]">N2</div>
+              <div className="w-8 h-8 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-blue-400 font-mono text-[9px]">N1</div>
+              <div className="w-8 h-8 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-purple-400 font-mono text-[9px]">N2</div>
             </div>
 
-            <div className="w-8 h-8 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-neutral-400 font-mono text-[8px] z-10">OUT</div>
+            <div className="w-10 h-10 rounded-full border border-border bg-neutral-950 flex items-center justify-center text-neutral-400 font-mono text-[10px] z-10">OUT</div>
           </div>
         </div>
       );

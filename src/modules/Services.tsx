@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import { 
   Laptop, 
@@ -82,6 +82,18 @@ export const Services = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  // Auto-play timer for mobile carousel (rotates every 4.5 seconds)
+  useEffect(() => {
+    const handleAutoPlay = () => {
+      // Only auto-play on mobile screen widths
+      if (typeof window !== 'undefined' && window.innerWidth >= 768) return;
+      const next = (activeSlide + 1) % SERVICES.length;
+      scrollTo(next);
+    };
+
+    const interval = setInterval(handleAutoPlay, 4500);
+    return () => clearInterval(interval);
+  }, [activeSlide]);
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -125,7 +137,7 @@ export const Services = () => {
 
   return (
     <section className="py-12 md:py-16 bg-transparent overflow-hidden relative">
-      <div className="container mx-auto max-w-5xl px-6">
+      <div className="container mx-auto max-w-[83rem] px-6">
         
         {/* Section Header */}
         <div className="mb-12">
@@ -147,8 +159,8 @@ export const Services = () => {
           ref={scrollRef}
           onScroll={handleScroll}
           className={cn(
-            "flex md:grid gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none no-scrollbar",
-            "pb-6 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 md:grid-cols-6 w-full"
+            "flex md:grid gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none no-scrollbar [scroll-padding-inline:7.5vw]",
+            "pb-6 md:pb-0 -mx-6 px-[7.5vw] md:mx-0 md:px-0 md:grid-cols-6 w-full"
           )}
         >
           {SERVICES.map((service, idx) => (
@@ -221,12 +233,7 @@ export const Services = () => {
         </div>
 
         {/* Control bar (Only visible on mobile) */}
-        <div className="flex md:hidden items-center justify-between mt-6 px-2 max-w-xs mx-auto relative z-20">
-          {/* Index Counter */}
-          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest select-none">
-            {String(activeSlide + 1).padStart(2, '0')} / {String(SERVICES.length).padStart(2, '0')}
-          </span>
-
+        <div className="flex md:hidden items-center justify-center mt-6 relative z-20">
           {/* Dots */}
           <div className="flex gap-2">
             {SERVICES.map((_, idx) => (
@@ -240,32 +247,6 @@ export const Services = () => {
                 aria-label={`Ir al servicio ${idx + 1}`}
               />
             ))}
-          </div>
-
-          {/* Arrows */}
-          <div className="flex gap-2">
-            <button 
-              onClick={() => scrollTo(Math.max(0, activeSlide - 1))}
-              disabled={activeSlide === 0}
-              className={cn(
-                "w-7 h-7 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-neutral-900/5 dark:hover:bg-neutral-950/10 hover:border-neutral-400 dark:hover:border-neutral-800 transition-all duration-200",
-                activeSlide === 0 ? "opacity-25 pointer-events-none" : "opacity-100"
-              )}
-              aria-label="Servicio anterior"
-            >
-              <ChevronLeft size={13} />
-            </button>
-            <button 
-              onClick={() => scrollTo(Math.min(SERVICES.length - 1, activeSlide + 1))}
-              disabled={activeSlide === SERVICES.length - 1}
-              className={cn(
-                "w-7 h-7 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-neutral-900/5 dark:hover:bg-neutral-950/10 hover:border-neutral-400 dark:hover:border-neutral-800 transition-all duration-200",
-                activeSlide === SERVICES.length - 1 ? "opacity-25 pointer-events-none" : "opacity-100"
-              )}
-              aria-label="Siguiente servicio"
-            >
-              <ChevronRight size={13} />
-            </button>
           </div>
         </div>
 

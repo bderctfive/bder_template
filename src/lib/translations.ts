@@ -92,6 +92,12 @@ export const translations = {
     "contact.form.msg": "Mensaje",
     "contact.form.msg.placeholder": "Cuéntanos brevemente tu idea...",
     "contact.form.submit": "Enviar Solicitud",
+    "contact.form.submitting": "Enviando...",
+    "contact.success": "¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.",
+    "contact.error.generic": "Ocurrió un error al enviar el mensaje. Inténtalo de nuevo.",
+    "contact.error.fields": "Por favor, completa todos los campos del formulario.",
+    "contact.error.email": "Por favor, ingresa un correo electrónico válido.",
+    "contact.error.api": "Error de configuración de correo electrónico.",
 
     // Footer
     "footer.rights": "Todos los derechos reservados.",
@@ -190,6 +196,12 @@ export const translations = {
     "contact.form.msg": "Message",
     "contact.form.msg.placeholder": "Briefly tell us about your idea...",
     "contact.form.submit": "Submit Request",
+    "contact.form.submitting": "Sending...",
+    "contact.success": "Message sent successfully! We will get in touch soon.",
+    "contact.error.generic": "An error occurred while sending the message. Please try again.",
+    "contact.error.fields": "Please fill in all the form fields.",
+    "contact.error.email": "Please enter a valid email address.",
+    "contact.error.api": "Email configuration error.",
 
     // Footer
     "footer.rights": "All rights reserved.",

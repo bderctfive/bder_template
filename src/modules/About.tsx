@@ -5,9 +5,18 @@ import { motion, Variants } from "framer-motion";
 import { Code2, Cpu, Globe2, Rocket, Terminal } from "lucide-react";
 import Image from 'next/image';
 import { useLanguage } from "@/context/LanguageContext";
+import { useTheme } from "next-themes";
+import { translations } from "@/lib/translations";
+
+type TranslationKey = keyof typeof translations['es'];
+
+const BASE_TECH_ICONS = ["python", "js", "react", "angular", "fastapi", "django", "laravel", "dart", "flutter"];
+const TECH_ICONS = [...BASE_TECH_ICONS, ...BASE_TECH_ICONS, ...BASE_TECH_ICONS, ...BASE_TECH_ICONS];
 
 export const About = () => {
   const { t } = useLanguage();
+  const { theme, resolvedTheme } = useTheme();
+  const iconTheme = (theme === 'dark' || resolvedTheme === 'dark') ? 'dark' : 'light';
 
   const marqueeVariants: Variants = {
     animate: {
@@ -53,7 +62,9 @@ export const About = () => {
                   </div>
                   <div>
                     <p className="text-foreground font-bold text-sm leading-none">{t("nav.services")}</p>
-                    <p className="text-neutral-500 text-[10px] mt-1 tracking-wider uppercase font-semibold font-mono">Backend & Infrastructure</p>
+                    <p className="text-neutral-500 text-[10px] mt-1 tracking-wider uppercase font-semibold font-mono">
+                      {t("about.workspace.desc" as TranslationKey)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -97,17 +108,35 @@ export const About = () => {
 
         {/* Infinite Tech Stack Marquee */}
         <div className="relative mt-16 py-6 border-t border-b border-border/40 bg-neutral-900/5 overflow-hidden">
+          {/* Gradient Fades for Premium Look */}
+          <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+
           <div className="flex overflow-hidden relative">
             <motion.div 
-              className="flex gap-8 flex-nowrap"
+              className="flex gap-[16px] md:gap-[24px] flex-nowrap"
               variants={marqueeVariants}
               animate="animate"
             >
-              <div className="flex gap-8 shrink-0">
-                <img src="https://skillicons.dev/icons?i=python,js,react,angular,fastapi,django,laravel,dart,flutter&theme=dark" alt="tech-1" className="h-8 md:h-10 max-w-none opacity-50 hover:opacity-80 transition-opacity duration-300" />
+              <div className="flex gap-[16px] md:gap-[24px] shrink-0">
+                {TECH_ICONS.map((tech, idx) => (
+                  <img 
+                    key={`tech-1-${idx}`} 
+                    src={`https://skillicons.dev/icons?i=${tech}&theme=${iconTheme}`} 
+                    alt={tech} 
+                    className="h-[36px] md:h-[44px] w-[36px] md:w-[44px] max-w-none opacity-50 hover:opacity-85 transition-all duration-300 hover:scale-105" 
+                  />
+                ))}
               </div>
-              <div className="flex gap-8 shrink-0">
-                <img src="https://skillicons.dev/icons?i=python,js,react,angular,fastapi,django,laravel,dart,flutter&theme=dark" alt="tech-1-dup" className="h-8 md:h-10 max-w-none opacity-50 hover:opacity-80 transition-opacity duration-300" />
+              <div className="flex gap-[16px] md:gap-[24px] shrink-0">
+                {TECH_ICONS.map((tech, idx) => (
+                  <img 
+                    key={`tech-2-${idx}`} 
+                    src={`https://skillicons.dev/icons?i=${tech}&theme=${iconTheme}`} 
+                    alt={tech} 
+                    className="h-[36px] md:h-[44px] w-[36px] md:w-[44px] max-w-none opacity-50 hover:opacity-85 transition-all duration-300 hover:scale-105" 
+                  />
+                ))}
               </div>
             </motion.div>
           </div>

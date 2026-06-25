@@ -1,0 +1,18 @@
+services:
+  bctech-web:
+    build:
+      context: ./bder_template
+      dockerfile: Dockerfile
+    image: bctech-web:latest
+    container_name: bctech-web
+    restart: unless-stopped
+    expose:
+      - "3000"
+    env_file:
+      - ./bder_template/.env.production
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

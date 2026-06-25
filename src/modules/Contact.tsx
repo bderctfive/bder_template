@@ -17,6 +17,21 @@ export const Contact = () => {
     message: "",
     website: "" // Honeypot spam protection
   });
+
+  React.useEffect(() => {
+    const handleCategorySelect = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setFormData(prev => ({
+          ...prev,
+          category: customEvent.detail
+        }));
+      }
+    };
+    window.addEventListener('select-category', handleCategorySelect);
+    return () => window.removeEventListener('select-category', handleCategorySelect);
+  }, []);
+
   const [touched, setTouched] = React.useState({
     name: false,
     email: false,

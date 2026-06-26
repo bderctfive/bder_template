@@ -206,11 +206,6 @@ export const Contact = () => {
                 title={t("contact.info.email")} 
                 detail="contact@bctech.com.mx" 
               />
-              <ContactInfo 
-                icon={Phone} 
-                title={t("contact.info.phone")} 
-                detail="+52 660 210 2997" 
-              />
             </div>
           </motion.div>
 

@@ -315,8 +315,8 @@ export const Services = () => {
           ref={scrollRef}
           onScroll={handleScroll}
           className={cn(
-            "flex md:grid gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none no-scrollbar [scroll-padding-inline:7.5vw]",
-            "pb-6 md:pb-0 -mx-6 px-[7.5vw] md:mx-0 md:px-0 md:grid-cols-6 w-full"
+            "flex md:grid gap-6 overflow-x-auto md:overflow-x-visible snap-x snap-mandatory md:snap-none no-scrollbar [scroll-padding-inline:calc(7.5vw+1.5rem)]",
+            "pt-4 pb-6 md:pt-0 md:pb-0 -mx-6 px-[calc(7.5vw+1.5rem)] md:mx-0 md:px-0 md:grid-cols-6 w-[calc(100%+3rem)] md:w-full"
           )}
         >
           {SERVICES.map((service, idx) => (

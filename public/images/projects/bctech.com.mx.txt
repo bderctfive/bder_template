@@ -1,0 +1,11 @@
+$ORIGIN bctech.com.mx.
+penel	IN	A	173.224.125.100
+_25._tcp.penel	IN	TLSA	0: php_network_getaddresses: getaddrinfo for penel.bctech.com.mx. failed: Name does not resolve
+@	IN	MX	penel.bctech.com.mx.
+autodiscover	IN	CNAME	penel.bctech.com.mx.
+_autodiscover._tcp	IN	SRV	penel.bctech.com.mx. 443
+autoconfig	IN	CNAME	penel.bctech.com.mx.
+@	IN	TXT	?
+@	IN	TXT	v=spf1 ip4:173.224.122.124 -all
+_dmarc	IN	TXT	v=DMARC1;p=none;rua=mailto:admin@bctech.com.mx.
+dkim._domainkey	IN	TXT	v=DKIM1;k=rsa;t=s;s=email;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwk8BUBFMwdVvRy7cAHGyTZOZ0EmzP28wAGCbbUqtf++x67bBumqJmNY++rOwwj/ZMQTjIzANc/27S4VWJlF+7pd08RAV3G3r9mr+7QKi/i8j1vqL6H8qMpW0DwSj2h/apZh4jFYNp6cyfFwxZF5la4YXsRsOAS+avECdqLRHJT+ckLedoKPjVocqKv6itMOp/+IbteQhgUROU0sjkqa3l3Y8X9+AINs+gdrb0oY/twBTvtXZMIecwEhvULL6HnCDq3RHYUWJae5K4xYVH2JF6DgxKSDcvkStNZmzIJS0RqQJcSI2On+gAkPDY3Uaq8jgwGr3ajlnPdn/wFoTScnwYwIDAQAB
